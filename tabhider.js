@@ -1,0 +1,53 @@
+(function () {
+  // Set title
+  document.title = "New tab";
+
+  //HARD REMOVE favicon
+  function removeFavicons() {
+    document.querySelectorAll("link[rel*='icon']").forEach(el => el.remove());
+
+    let link = document.createElement("link");
+    link.rel = "icon";
+    link.href = "data:,";
+    document.head.appendChild(link);
+  }
+
+  removeFavicons();
+  setInterval(removeFavicons, 1000);
+
+  // Create overlay
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100vw";
+  overlay.style.height = "100vh";
+  overlay.style.background = "black";
+  overlay.style.zIndex = "999999999";
+  overlay.style.display = "none";
+
+  document.body.appendChild(overlay);
+
+  let isOn = false;
+  // Ctrl + M toggle ONLY control
+  document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === "m") {
+      isOn = !isOn;
+      overlay.style.display = isOn ? "block" : "none";
+    }
+  });
+
+  // When you leave tab (Alt+Tab, switch tabs, minimize)
+  function handleLeave() {
+    if (!isOn) {
+      overlay.style.display = "block";
+      isOn = true; // lock it ON
+    }
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) handleLeave();
+  });
+
+  window.addEventListener("blur", handleLeave);
+})();
