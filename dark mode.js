@@ -1,0 +1,1 @@
+javascript:const style = document.createElement('style');style.innerHTML = `  html {  filter: invert(0.9) hue-rotate(180deg);}img, video {  filter: invert(1) hue-rotate(180deg);}`;document.head.appendChild(style);
